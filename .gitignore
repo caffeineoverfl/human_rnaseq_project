@@ -1,7 +1,7 @@
 .vscode/
 
 # Raw data
-data/raw/
+!data/raw/.gitkeep
 data/*/*.fastq
 data/*/*.fastq.gz
 data/*/*.fq.gz

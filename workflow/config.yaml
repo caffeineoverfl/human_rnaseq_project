@@ -1,0 +1,18 @@
+# -------------------------------
+# RNA-seq project configuration
+# -------------------------------
+
+samples:
+  - control1
+  - control2
+  - treated1
+  - treated2
+
+raw_data_dir: data/raw
+results_dir: results
+
+reference:
+  genome_fasta: refs/genome.fa
+  annotation_gtf: refs/annotation.gtf
+
+threads: 4

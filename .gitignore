@@ -34,3 +34,4 @@ refs/*.gff
 refs/*.gff3
 refs/*.fa.gz
 refs/*.gtf.gz
+refs/*.bt2

@@ -1,21 +1,21 @@
 ##########################################
-# RNA-seq pipeline (config-driven)
+# Paired-end RNA-seq pipeline (repo-root safe)
 ##########################################
 
-import os
-import yaml
+import glob
 
-# -------------------------
-# Load config
-# -------------------------
+# Config file
 configfile: "config.yaml"
 
 SAMPLES = config["samples"]
-RAW_DIR = config["raw_data_dir"]
-RESULTS_DIR = config["results_dir"]
-GENOME = config["reference"]["genome_fasta"]
+RAW_DIR = config["raw_data_dir"]        # "data/raw"
+RESULTS_DIR = config["results_dir"]    # "results"
 GTF = config["reference"]["annotation_gtf"]
 THREADS = config.get("threads", 4)
+
+# List all Bowtie2 index files for Snakemake input
+GENOME_INDEX_FILES = glob.glob("refs/genome_index*")
+GENOME_INDEX_BASENAME = "refs/genome_index"  # used by bowtie2 in shell
 
 # -------------------------
 # Rule all: final outputs
@@ -44,20 +44,20 @@ rule fastqc:
         """
 
 # -------------------------
-# ALIGNMENT
+# ALIGNMENT (Bowtie2)
 # -------------------------
 rule align:
     input:
         r1=f"{RAW_DIR}/{{sample}}_R1.fastq.gz",
         r2=f"{RAW_DIR}/{{sample}}_R2.fastq.gz",
-        index=GENOME
+        index=GENOME_INDEX_FILES   # Snakemake sees all index files
     output:
         bam=f"{RESULTS_DIR}/alignments/{{sample}}.bam"
     threads: THREADS
     shell:
         """
         mkdir -p {RESULTS_DIR}/alignments
-        bowtie2 -x {input.index} -1 {input.r1} -2 {input.r2} \
+        bowtie2 -x {GENOME_INDEX_BASENAME} -1 {input.r1} -2 {input.r2} \
             | samtools view -bS - > {output.bam}
         """
 
@@ -76,7 +76,7 @@ rule sort_bam:
         """
 
 # -------------------------
-# GENE COUNTS
+# GENE COUNTS (featureCounts)
 # -------------------------
 rule count:
     input:

@@ -12,7 +12,7 @@ raw_data_dir: data/raw
 results_dir: results
 
 reference:
-  genome_fasta: refs/genome.fa
-  annotation_gtf: refs/annotation.gtf
+  genome_index: refs/genome_index               # Bowtie2 index base name
+  annotation_gtf: refs/Homo_sapiens.GRCh38.110.gtf
 
 threads: 4

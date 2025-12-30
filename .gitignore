@@ -1,0 +1,36 @@
+.vscode/
+
+# Raw data
+data/raw/
+data/*/*.fastq
+data/*/*.fastq.gz
+data/*/*.fq.gz
+
+# Snakemake
+.snakemake/
+.snakejob.*
+
+# Results
+results/alignments/*
+results/counts/*
+results/plots/*
+
+!results/alignments/.gitkeep
+!results/counts/.gitkeep
+!results/plots/.gitkeep
+
+#Alignments
+.bam
+.bai
+.sam 
+.cram
+.crai
+
+# Reference Genomes
+refs/*.fa
+refs/*.fasta
+refs/*.gtf
+refs/*.gff
+refs/*.gff3
+refs/*.fa.gz
+refs/*.gtf.gz

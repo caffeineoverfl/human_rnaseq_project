@@ -1,10 +1,9 @@
 ##########################################
-# Paired-end RNA-seq pipeline (repo-root safe)
+# RNA-seq pipeline
 ##########################################
 
 import glob
 
-# Config file
 configfile: "config.yaml"
 
 SAMPLES = config["samples"]

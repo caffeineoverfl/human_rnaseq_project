@@ -21,7 +21,8 @@ GENOME_INDEX_BASENAME = "refs/genome_index"  # used by bowtie2 in shell
 # -------------------------
 rule all:
     input:
-        expand(f"{RESULTS_DIR}/qc/{{sample}}_fastqc.html", sample=SAMPLES),
+        expand(f"{RESULTS_DIR}/qc/{{sample}}_R1_fastqc.html", sample=SAMPLES),
+        expand(f"{RESULTS_DIR}/qc/{{sample}}_R2_fastqc.html", sample=SAMPLES),
         expand(f"{RESULTS_DIR}/alignments/{{sample}}.sorted.bam", sample=SAMPLES),
         f"{RESULTS_DIR}/multiqc/multiqc_report.html",
         f"{RESULTS_DIR}/counts/gene_counts.tsv"
@@ -34,13 +35,16 @@ rule fastqc:
         r1=f"{RAW_DIR}/{{sample}}_R1.fastq.gz",
         r2=f"{RAW_DIR}/{{sample}}_R2.fastq.gz"
     output:
-        html=f"{RESULTS_DIR}/qc/{{sample}}_fastqc.html",
-        zip=f"{RESULTS_DIR}/qc/{{sample}}_fastqc.zip"
+        html_r1=f"{RESULTS_DIR}/qc/{{sample}}_R1_fastqc.html",
+        zip_r1=f"{RESULTS_DIR}/qc/{{sample}}_R1_fastqc.zip",
+        html_r2=f"{RESULTS_DIR}/qc/{{sample}}_R2_fastqc.html",
+        zip_r2=f"{RESULTS_DIR}/qc/{{sample}}_R2_fastqc.zip"
     shell:
         """
         mkdir -p {RESULTS_DIR}/qc
         fastqc {input.r1} {input.r2} --outdir {RESULTS_DIR}/qc
         """
+
 
 # -------------------------
 # ALIGNMENT (Bowtie2)
@@ -94,7 +98,8 @@ rule count:
 # -------------------------
 rule multiqc:
     input:
-        expand(f"{RESULTS_DIR}/qc/{{sample}}_fastqc.zip", sample=SAMPLES)
+        expand(f"{RESULTS_DIR}/qc/{{sample}}_R1_fastqc.zip", sample=SAMPLES),
+        expand(f"{RESULTS_DIR}/qc/{{sample}}_R2_fastqc.zip", sample=SAMPLES)
     output:
         f"{RESULTS_DIR}/multiqc/multiqc_report.html"
     shell:
